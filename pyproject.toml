@@ -1,0 +1,12 @@
+[project]
+name = "transcribe-ai"
+version = "0.1.0"
+description = "AI-powered transcription and speaker diarization for clear and organized text"
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["transcribe-ai/", "transcribe-ai/core", "transcribe-ai/http"]

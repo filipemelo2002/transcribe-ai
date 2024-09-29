@@ -6,7 +6,7 @@ dirname = os.path.dirname(__file__)
 
 
 def load_pipeline_from_pretrained(token: str) -> Pipeline:
-    path_to_config = Path(os.path.join(dirname, '../models/pyannote_diarization_config.yaml'))
+    path_to_config = Path(os.path.join(dirname, '../../models/pyannote_diarization_config.yaml'))
     
     print(f"Reading config file from {path_to_config}")
     
