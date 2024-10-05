@@ -1,8 +1,9 @@
 import os
-from typing import  AnyStr
+from typing import  AnyStr, List
 import torch
 from .pipeline import load_pipeline_from_pretrained
-from pyannote.audio import Audio
+from .diarization_segment import DiarizationSegment
+import json
 
 class Diarization:
     def __init__(self, token: AnyStr):
@@ -10,13 +11,16 @@ class Diarization:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.pipeline.to(device)
 
-    def process_file(self, file, out_path):
+    def process_file(self, file) -> List[DiarizationSegment]:
         diarization = self.pipeline(file)
         
-        os.makedirs(os.path.dirname(f'{out_path}.rttm'), exist_ok=True)
-
-        with open(f'{out_path}.rttm', 'w') as out_file:
-            diarization.write_rttm(out_file)
+        processed_diarization = []
+        
+        for turn, _, speaker in diarization.itertracks(yield_label=True):
+            segment = DiarizationSegment(start=f"{turn.start:.3f}", end=f"{turn.end:.3f}", speaker_id=speaker)
+            processed_diarization.append(segment)
+        
+        return processed_diarization
 
     def process_request(self, file):
         
@@ -31,7 +35,8 @@ class Diarization:
             for turn, _, speaker in diarization.itertracks(yield_label=True)
         ]
         
-        return {"diarization": processed_diarization}
+        with open('./diarization-output.json', 'w') as out_file:
+            json.dump({"diarization": processed_diarization}, out_file)
         
         
     
