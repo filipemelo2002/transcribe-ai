@@ -12,7 +12,7 @@ app = FastAPI()
 @app.post("/transcribe")
 def transcribe_file(audio: UploadFile):
     print(f"incoming file {audio}")
-    return model.process_request(audio.file)     
+    return model.process_file(audio.file)     
 
 @app.get("/hello")
 def hello_world():
