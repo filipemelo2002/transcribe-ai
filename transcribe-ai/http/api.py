@@ -17,10 +17,12 @@ app = FastAPI()
 @app.post("/transcribe")
 async def transcribe_file(audio: UploadFile):
     diarization_segments = diarization_service.process_file(audio.file)
+    last_end = 0
     for  segment in diarization_segments:
         audio_file = audio_service.extract_segment(file=audio.file, start=float(segment.start) * 1000, end=float(segment.end)*1000)
-        transcriptions = transcribe_service.transcribe_audio(file=audio_file)
+        transcriptions = transcribe_service.transcribe_audio(file=audio_file, append_time=last_end)
         segment.transcriptions = transcriptions
+        last_end = float(segment.end)
     return diarization_segments
 
 @app.get("/hello")
