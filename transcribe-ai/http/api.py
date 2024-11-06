@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile
-from core.diarization import Diarization
-from core.transcribe import Transcribe
-from core.audio_service import AudioService
+from fastapi.middleware.cors import CORSMiddleware
+from ..core.diarization import Diarization
+from ..core.transcribe import Transcribe
+from ..core.audio_service import AudioService
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,6 +14,14 @@ transcribe_service = Transcribe()
 
 
 app = FastAPI()
+origins = ['*']
+
+app.add_middleware(
+    middleware_class=CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 @app.post("/transcribe")
 async def transcribe_file(audio: UploadFile):

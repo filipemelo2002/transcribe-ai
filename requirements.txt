@@ -126,7 +126,6 @@ torchaudio==2.4.1
 torchmetrics==1.4.2
 torchvision==0.19.1
 tqdm==4.66.5
--e git+ssh://git@github.com/filipemelo2002/transcribe-ai.git@eb5f91eb14d85aa536f7141fa189e7b9ba0afbbd#egg=transcribe_ai
 triton==3.0.0
 typer==0.12.5
 typing_extensions==4.12.2
