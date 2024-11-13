@@ -1,9 +1,9 @@
-import os
-from typing import  AnyStr, List
+from typing import AnyStr, List
 import torch
 from .pipeline import load_pipeline_from_pretrained
 from .diarization_segment import DiarizationSegment
 import json
+
 
 class Diarization:
     def __init__(self, token: AnyStr):
@@ -17,7 +17,9 @@ class Diarization:
         processed_diarization = []
         
         for turn, _, speaker in diarization.itertracks(yield_label=True):
-            segment = DiarizationSegment(start=f"{turn.start:.3f}", end=f"{turn.end:.3f}", speaker_id=speaker)
+            segment = DiarizationSegment(start=f"{turn.start:.3f}", 
+                                         end=f"{turn.end:.3f}", 
+                                         speaker_id=speaker)
             processed_diarization.append(segment)
         
         return processed_diarization

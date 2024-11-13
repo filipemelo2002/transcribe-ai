@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from pyannote.audio import Pipeline
-
 dirname = os.path.dirname(__file__)
 
 
