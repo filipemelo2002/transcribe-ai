@@ -26,14 +26,17 @@ app.add_middleware(
 @app.post("/transcribe")
 async def transcribe_file(file: UploadFile):
     sound = audio_service.load_audio_file(file=file)
-    diarization_segments = diarization_service.process_file(sound)
-    for  segment in diarization_segments:
+    diarized_segments = diarization_service.process_file(sound)
+    response = []
+    for  segment in diarized_segments:
         audio_file = audio_service.extract_segment(file=sound, start=float(segment.start) * 1000, end=float(segment.end)*1000)
         transcriptions = transcribe_service.transcribe_audio(file=audio_file, append_time=float(segment.start))
         segment.transcriptions = transcriptions
+        if len(transcriptions) > 0:
+            response.append(segment)
 
     os.remove(sound)
-    return diarization_segments
+    return response
 
 @app.get("/hello")
 def hello_world():
